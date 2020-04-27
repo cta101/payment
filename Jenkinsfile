@@ -40,7 +40,7 @@ try {
     stage("build dockerfile") {
         docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub-ctael5co') {
             shortSHA = getSha()
-            def customImage = docker.build("ctael5co/sh-payment:${shortSHA}","./docker/payment/")
+            def customImage = docker.build("ctael5co/sh-payment:${shortSHA}","-f /docker/payment/Dockerfile .")
             customImage.push()
             customImage.push('latest')    
         }
