@@ -45,12 +45,11 @@ try {
 
     stage("test") {
         node {
-            // shortSHA = "4210ff5"
             withEnv(["XDG_CACHE_HOME=/tmp"]) {
-                docker.image("$dockerImage:$shortSHA").inside() {
-                    sh "env && pwd && ls -l && ls -l /go/src/github.com/microservices-demo/payment && ls -l /go/src/github.com/microservices-demo/payment/vendor/github.com/"
-                    sh "cd /go/src/github.com/microservices-demo/payment"
-                    sh "go test -i -v -covermode=count -coverprofile=/tmp/coverage.out"
+                docker.image("$dockerImage:$shortSHA").inside("-u 0") {
+                    // sh "env && pwd && ls -l && ls -l /go/src/github.com/microservices-demo/payment && ls -l /go/src/github.com/microservices-demo/payment/vendor/github.com/"
+                    // sh "cd /go/src/github.com/microservices-demo/payment"
+                    // sh "go test -i -v -covermode=count -coverprofile=/tmp/coverage.out"
                     sh "go test -v -covermode=count -coverprofile=/tmp/coverage.out"
                 }
             }

@@ -1,7 +1,5 @@
 FROM golang:1.7
 
-USER 1000:1000
-
 RUN mkdir /app
 COPY . /go/src/github.com/microservices-demo/payment/
 
