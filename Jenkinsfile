@@ -1,7 +1,7 @@
 // String credentialsId = 'jenkinsAwsCredentials'
 
 def dockerImage = "ctael5co/sh-payment"
-def shortSha = ""
+def shortSHA = ""
 
 def getSha() {
     return sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
@@ -46,7 +46,7 @@ try {
     stage("test") {
         node {
             withEnv(["XDG_CACHE_HOME=/tmp"]) {
-                docker.image("$dockerImage:$shortSha").inside() {
+                docker.image("$dockerImage:$shortSHA").inside() {
                     sh "cd /go/src/github.com/microservices-demo/payment"
                     sh "go test -v -covermode=count -coverprofile=coverage.out"
                 }
