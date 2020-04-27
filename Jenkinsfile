@@ -1,6 +1,6 @@
 // String credentialsId = 'jenkinsAwsCredentials'
 
-String dockerImage = "ctael5co/sh-payment"
+def dockerImage = "ctael5co/sh-payment"
 
 def getSha() {
     return sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
