@@ -31,21 +31,21 @@ try {
     //     }
     // }
 
-    // stage("build docker") {
-    //     node {
-    //         docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub-ctael5co') {
-    //             shortSHA = getSha()
-    //             def customImage = docker.build("$dockerImage" + ":${shortSHA}","-f docker/payment/Dockerfile .")
-    //             customImage.push()
-    //             customImage.push('latest')    
-    //         }   
-    //     }
+    stage("build docker") {
+        node {
+            docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub-ctael5co') {
+                shortSHA = getSha()
+                def customImage = docker.build("$dockerImage" + ":${shortSHA}","-f docker/payment/Dockerfile .")
+                customImage.push()
+                customImage.push('latest')    
+            }   
+        }
 
-    // }
+    }
 
     stage("test") {
         node {
-            shortSHA = "4210ff5"
+            // shortSHA = "4210ff5"
             withEnv(["XDG_CACHE_HOME=/tmp"]) {
                 docker.image("$dockerImage:$shortSHA").inside() {
                     sh "env && pwd && ls -l && ls -l /go/src/github.com/microservices-demo/payment && ls -l /go/src/github.com/microservices-demo/payment/vendor/github.com/"
