@@ -1,5 +1,7 @@
 // String credentialsId = 'jenkinsAwsCredentials'
 
+String dockerImage = "ctael5co/sh-payment"
+
 def getSha() {
     return sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
 }
@@ -12,15 +14,6 @@ try {
             checkout scm
         }
     }
-
-    // Dependencies
-    // stage('init') {
-    //     node {
-    //         docker.image('ctael5co/golang-git-alpine').inside() {
-    //             sh 'go get -u github.com/FiloSottile/gvt'
-    //         }
-    //     }
-    // }
 
     // stage("build go") {
     //     node {
@@ -37,12 +30,26 @@ try {
     //     }
     // }
 
-    stage("build dockerfile") {
-        docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub-ctael5co') {
-            shortSHA = getSha()
-            def customImage = docker.build("ctael5co/sh-payment:${shortSHA}","-f docker/payment/Dockerfile .")
-            customImage.push()
-            customImage.push('latest')    
+    stage("build docker") {
+        node {
+            docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub-ctael5co') {
+                shortSHA = getSha()
+                def customImage = docker.build($dockerImage + ":${shortSHA}","-f docker/payment/Dockerfile .")
+                customImage.push()
+                customImage.push('latest')    
+            }   
+        }
+
+    }
+
+    stage("test") {
+        node {
+            withEnv(["XDG_CACHE_HOME=/tmp"]) {
+                docker.image($dockerImage).inside() {
+                    sh "cd /go/src/github.com/microservices-demo/payment"
+                    sh "go test -v -covermode=count -coverprofile=coverage.out"
+                }
+            }
         }
     }
 
