@@ -34,7 +34,7 @@ try {
         node {
             docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub-ctael5co') {
                 shortSHA = getSha()
-                def customImage = docker.build($dockerImage + ":${shortSHA}","-f docker/payment/Dockerfile .")
+                def customImage = docker.build("$dockerImage" + ":${shortSHA}","-f docker/payment/Dockerfile .")
                 customImage.push()
                 customImage.push('latest')    
             }   
