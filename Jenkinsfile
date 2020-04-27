@@ -46,7 +46,7 @@ try {
         node {
             withEnv(["XDG_CACHE_HOME=/tmp"]) {
                 docker.image("$dockerImage").inside() {
-                    sh "cd /go/src/github.com/microservices-demo/payment"
+                    // sh "cd /go/src/github.com/microservices-demo/payment"
                     sh "go test -v -covermode=count -coverprofile=coverage.out"
                 }
             }
