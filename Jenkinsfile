@@ -22,20 +22,20 @@ try {
     //     }
     // }
 
-    stage("build go") {
-        node {
-            // Either this XDG_CACHE_HOME which sets the go .cache folder
-            // or run with -u root.  without these it can only write to //// the folders mounted with rw,z 
-            withEnv(["XDG_CACHE_HOME=/tmp"]) {
-                docker.image('golang:latest').inside() {
-                    sh "pwd"
-                    sh "ls -l"
-                    sh "go get -u github.com/FiloSottile/gvt"
-                    sh "gvt restore"
-                }
-            }
-        }
-    }
+    // stage("build go") {
+    //     node {
+    //         // Either this XDG_CACHE_HOME which sets the go .cache folder
+    //         // or run with -u root.  without these it can only write to //// the folders mounted with rw,z 
+    //         withEnv(["XDG_CACHE_HOME=/tmp"]) {
+    //             docker.image('golang:latest').inside() {
+    //                 sh "pwd"
+    //                 sh "ls -l"
+    //                 sh "go get -u github.com/FiloSottile/gvt"
+    //                 sh "gvt restore"
+    //             }
+    //         }
+    //     }
+    // }
 
     stage("build dockerfile") {
         docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub-ctael5co') {
